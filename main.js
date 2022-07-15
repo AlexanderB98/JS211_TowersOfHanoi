@@ -29,6 +29,10 @@ const printStacks = () => {
   console.log("c: " + stacks.c);
 }
 
+//Game starts with 4,3,2,1 in the a stack
+// Win is 4,3,2,1 in either b or c stack
+
+
 // Next, what do you think this function should do?
 const movePiece = () => {
   // Your code here
