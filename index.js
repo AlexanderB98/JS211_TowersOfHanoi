@@ -1,3 +1,4 @@
+
 // * This js file is incomplete. It will log to the console the elements you click
     // call another function and set stone. You will have to work through the logic
     // of the game as you know it from building it in the terminal. Work through the
@@ -7,25 +8,46 @@
 // * Why are you get a warning in your console? Fix it.
 // * Delete these comment lines!
 
-const stone = null
+let stone = null
+let pickup = true;
+
 
 // this function is called when a row is clicked. 
 // Open your inspector tool to see what is being captured and can be used.
 const selectRow = (row) => {
   const currentRow = row.getAttribute("data-row")
+  let currentStack;
+  let targetStack;
   
   console.log("Yay, we clicked an item", row)
   console.log("Here is the stone's id: ", row.id)
   console.log("Here is the stone's data-size: ", currentRow)
+  console.log(stone)
+  console.log(document.getElementById("temp"));
 
-  pickUpStone(row.id)
+  if(pickup) {
+    currentStack = row.id;
+    pickUpStone(row.id)
+   } 
+  else {
+    targetStack = row.id;
+    dropStone(row.id, stone)
+  }
+
+  if(checkForWin()){
+    document.getElementById("illegalMove").innerHTML = "YOU WIN!";
+  }
 } 
 
 // this function can be called to get the last stone in the stack
 // but there might be something wrong with it...
 const pickUpStone = (rowID) => {
+  console.log("stone pick up")
   const selectedRow = document.getElementById(rowID);
-  stone = selectedRow.removeChild(selectedRow.lastChild);
+  let childToRemoveId = selectedRow.children.length - 1
+  stone = selectedRow.children[childToRemoveId]
+  selectedRow.removeChild(stone);
+  pickup = false;
   console.log(stone)
 }
 
@@ -34,9 +56,30 @@ const pickUpStone = (rowID) => {
 // Something like: if(!stone){pickupStone} else{dropStone}
 
 const dropStone = (rowID, stone) => {
-  document.getElementById(rowID).appendChild(stone)
-  stone = null
+  console.log("stone drop")
+  let targetRow = document.getElementById(rowID)
+  let lastChildId = targetRow.children.length - 1;
+  console.log(lastChildId)
+  let lastChild = targetRow.children[lastChildId]
+  console.log(stone.getAttribute("id"))
+  if(lastChildId >= 0 && stone.getAttribute("id") > lastChild.getAttribute("id")){
+    document.getElementById("illegalMove").innerHTML = "Illegal move. Please choose another row";
+    return;
+  }
+  targetRow.appendChild(stone);
+  document.getElementById("illegalMove").innerHTML = " ";
+  pickup = true;
+  console.log(stone)
+}
+
+const checkForWin = () => {
+  let rowA = document.getElementById("a");
+  let rowB = document.getElementById("b");
+  console.log(rowA.children.length)
+  if(rowA.children.length == 4 || rowB.children.length == 4){
+    return true;
+  }
+  return false;
 }
 
 // * Remember you can use your logic from 'main.js' to maintain the rules of the game. But how? Follow the flow of data just like falling dominoes.
-

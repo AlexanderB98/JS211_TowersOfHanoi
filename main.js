@@ -17,9 +17,9 @@ const rl = readline.createInterface({
         // * 1 is the smallest
 
 let stacks = {
-  a: [4, 3, 2, 1],
+  a: [],
   b: [],
-  c: []
+  c: [4, 3, 2, 1]
 };
 
 // Start here. What is this function doing?
@@ -29,32 +29,71 @@ const printStacks = () => {
   console.log("c: " + stacks.c);
 }
 
-//Game starts with 4,3,2,1 in the a stack
-// Win is 4,3,2,1 in either b or c stack
-
-
 // Next, what do you think this function should do?
-const movePiece = () => {
-  // Your code here
+const movePiece = (currentStack, targetStack) => {
+  switch(currentStack) {
+    case "a":
+      currentStack = stacks.a;
+      break;
+    case "b":
+      currentStack = stacks.b;
+      break;
+    case "c":
+      currentStack = stacks.c;
+      break;
+  }
 
+  switch(targetStack) {
+    case "a":
+      targetStack = stacks.a;
+      break;
+    case "b":
+      targetStack = stacks.b;
+      break;
+    case "c":
+      targetStack = stacks.c;
+      break;
+  }
+
+  let movedItem = currentStack[currentStack.Length - 1];
+  targetStack.push(movedItem);
 }
 
 // Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
 const isLegal = () => {
   // Your code here
+  let isLegal = true;
+  stacks.forEach(stack => {
+    if(stack.Length >= 2){
+      isLegal = stack[length - 1] < stack[length - 2]
+    }
+    if(!isLegal){
+      return false;
+    }
+  });
 
+  return true;
 }
 
 // What is a win in Towers of Hanoi? When should this function run?
 const checkForWin = () => {
-  // Your code here
+  if(stacks.a == [4, 3, 2, 1] || stacks.b == [4, 3, 2, 1]){
+    return true;
+  }
 
+  return false;
 }
 
 // When is this function called? What should it do with its argument?
 const towersOfHanoi = (startStack, endStack) => {
-  // Your code here
-
+  movePiece(startStack, endStack);
+  if(!isLegal){
+    movePiece(endStack, startStack);
+    return "illegal";
+  }
+  if(checkForWin){
+    return "win";
+  }
 }
 
 const getPrompt = () => {
